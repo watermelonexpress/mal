@@ -40,15 +40,17 @@ def read_form(reader)
 end
 
 def read_list(reader)
+  reader.next
   list = MalList.new
   while reader.peek != ')'
     break if reader.peek.nil?
     list << read_form(reader)
   end
+  reader.next
 
   list
 end
 
 def read_atom(reader)
-
+  reader.next.to_sym
 end
