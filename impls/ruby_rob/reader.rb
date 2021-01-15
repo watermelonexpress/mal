@@ -10,7 +10,6 @@ class Reader
   def next
     token = peek
     @position += 1
-    # @position = (@tokens.size - 1) if @position > @tokens.size
     token
   end
 
@@ -34,16 +33,18 @@ def read_form(reader)
   case reader.peek
   when '('
     read_list(reader)
+  when '['
+    read_list(reader, ']')
   else
     read_atom(reader)
   end
 end
 
-def read_list(reader)
+def read_list(reader, close = ')')
   reader.next
   list = MalList.new
-  while reader.peek != ')'
-    break if reader.peek.nil?
+  while reader.peek != close
+    raise "expected '#{close}' got EOF" if reader.peek.nil?
     list << read_form(reader)
   end
   reader.next
@@ -52,5 +53,11 @@ def read_list(reader)
 end
 
 def read_atom(reader)
-  reader.next.to_sym
+  token = reader.next
+  case token
+  when /\d+/
+    token.to_i
+  else
+    token.to_sym
+  end
 end
