@@ -13,7 +13,6 @@ def READ(string)
 end
 
 def EVAL(data, env)
-  # string
   ast = eval_ast(data, env)
   return ast unless data.is_a? MalList
   return data if data.empty?
