@@ -1,0 +1,3 @@
+class MalList < Array
+
+end
